@@ -1,13 +1,48 @@
 # OptimaLife Churn Prediction & Portfolio Analysis — 5-tab app matching presentation
 # Co-authored with CoCo
 
+import os
+import logging
+import sys
+
+
+logging.getLogger("streamlit.runtime.scriptrunner_utils.script_run_context").setLevel(
+    logging.ERROR
+)
+
+
+def _bootstrap_streamlit_runtime():
+    try:
+        from streamlit.runtime.scriptrunner import get_script_run_ctx
+    except Exception:
+        return
+
+    if get_script_run_ctx() is not None:
+        return
+
+    os.execv(
+        sys.executable,
+        [
+            sys.executable,
+            "-m",
+            "streamlit",
+            "run",
+            os.path.abspath(__file__),
+            "--server.address",
+            "0.0.0.0",
+            "--server.port",
+            "8505",
+        ],
+    )
+
+
+_bootstrap_streamlit_runtime()
+
 import streamlit as st
 import pandas as pd
 import numpy as np
-import os
 import time
 import importlib
-import sys
 import io
 import pickle
 
