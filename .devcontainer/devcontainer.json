@@ -10,25 +10,33 @@
       ]
     },
     "vscode": {
-      "settings": {},
+      "settings": {
+        "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "browser.trustedDomains": [
+          "https://*.app.github.dev",
+          "http://localhost:8501",
+          "http://127.0.0.1:8501"
+        ]
+      },
       "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance"
       ]
     }
   },
-  "updateContentCommand": "[ -f packages.txt ] && sudo apt update && sudo apt upgrade -y && sudo xargs apt install -y <packages.txt; [ -f requirements.txt ] && pip3 install --user -r requirements.txt; pip3 install --user streamlit; echo '✅ Packages installed and Requirements met'",
+  "updateContentCommand": "[ -f packages.txt ] && sudo apt update && sudo apt upgrade -y && sudo xargs apt install -y <packages.txt; [ -f requirements.txt ] && pip3 install --user -r requirements.txt; echo '✅ Packages installed and Requirements met'",
   "postAttachCommand": {
-    "server": "streamlit run streamlit_app.py --server.address 0.0.0.0 --server.port 8507 --server.enableCORS false --server.enableXsrfProtection false"
+    "server": ". .venv/bin/activate && python -m streamlit run streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.enableCORS false --server.enableXsrfProtection false"
   },
   "portsAttributes": {
-    "8507": {
+    "8501": {
       "label": "Application",
       "onAutoForward": "openPreview",
       "visibility": "public"
     }
   },
   "forwardPorts": [
-    8507
+    8501
   ]
 }

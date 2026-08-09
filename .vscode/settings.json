@@ -2,5 +2,9 @@
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.analysis.extraPaths": [
     ".venv/lib/python3.11/site-packages"
+  ],
+  "browser.trustedDomains": [
+    "https://*.app.github.dev",
+    "http://localhost:8501"
   ]
 }
