@@ -46,7 +46,7 @@ if not any(isinstance(f, _SklearnCompatFinder) for f in sys.meta_path):
     sys.meta_path.insert(0, _SklearnCompatFinder())
 
 try:
-    import sklearn._loss
+    _sklearn_loss = importlib.import_module('sklearn._loss')
     _loss_classes = {}
     for _submod in ('sklearn._loss.loss', 'sklearn._loss._loss', 'sklearn._loss'):
         try:
@@ -70,11 +70,11 @@ try:
         'CyHuberLoss': 'HuberLoss',
     }
     for cy_name, py_name in _CY_TO_PY_RENAMES.items():
-        if not hasattr(sklearn._loss, cy_name):
+        if not hasattr(_sklearn_loss, cy_name):
             if py_name in _loss_classes:
-                setattr(sklearn._loss, cy_name, _loss_classes[py_name])
-            elif hasattr(sklearn._loss, py_name):
-                setattr(sklearn._loss, cy_name, getattr(sklearn._loss, py_name))
+                setattr(_sklearn_loss, cy_name, _loss_classes[py_name])
+            elif hasattr(_sklearn_loss, py_name):
+                setattr(_sklearn_loss, cy_name, getattr(_sklearn_loss, py_name))
 except ImportError:
     pass
 
@@ -86,7 +86,7 @@ def load_artifacts():
     import joblib
 
     def _load_with_compat_unpickler(filepath):
-        import sklearn._loss
+        _sklearn_loss = importlib.import_module('sklearn._loss')
         available_classes = {}
         for submod_name in ('sklearn._loss.loss', 'sklearn._loss._loss', 'sklearn._loss'):
             try:
