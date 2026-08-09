@@ -80,38 +80,40 @@ class _SklearnCompatFinder:
 if not any(isinstance(f, _SklearnCompatFinder) for f in sys.meta_path):
     sys.meta_path.insert(0, _SklearnCompatFinder())
 
-try:
-    _sklearn_loss = importlib.import_module('sklearn._loss')
-    _loss_classes = {}
-    for _submod in ('sklearn._loss.loss', 'sklearn._loss._loss', 'sklearn._loss'):
-        try:
-            _mod = importlib.import_module(_submod)
-            for _attr in dir(_mod):
-                if 'Loss' in _attr or 'Error' in _attr:
-                    _loss_classes[_attr] = getattr(_mod, _attr)
-        except ImportError:
-            continue
 
-    _CY_TO_PY_RENAMES = {
-        'CyHalfBinomialLoss': 'HalfBinomialLoss',
-        'CyHalfSquaredError': 'HalfSquaredError',
-        'CyAbsoluteError': 'AbsoluteError',
-        'CyHalfPoissonLoss': 'HalfPoissonLoss',
-        'CyHalfGammaLoss': 'HalfGammaLoss',
-        'CyHalfTweedieLoss': 'HalfTweedieLoss',
-        'CyHalfMultinomialLoss': 'HalfMultinomialLoss',
-        'CyHalfTweedieLossIdentity': 'HalfTweedieLossIdentity',
-        'CyPinballLoss': 'PinballLoss',
-        'CyHuberLoss': 'HuberLoss',
-    }
-    for cy_name, py_name in _CY_TO_PY_RENAMES.items():
-        if not hasattr(_sklearn_loss, cy_name):
-            if py_name in _loss_classes:
-                setattr(_sklearn_loss, cy_name, _loss_classes[py_name])
-            elif hasattr(_sklearn_loss, py_name):
-                setattr(_sklearn_loss, cy_name, getattr(_sklearn_loss, py_name))
-except ImportError:
-    pass
+def _prepare_sklearn_compat():
+    try:
+        _sklearn_loss = importlib.import_module('sklearn._loss')
+        _loss_classes = {}
+        for _submod in ('sklearn._loss.loss', 'sklearn._loss._loss', 'sklearn._loss'):
+            try:
+                _mod = importlib.import_module(_submod)
+                for _attr in dir(_mod):
+                    if 'Loss' in _attr or 'Error' in _attr:
+                        _loss_classes[_attr] = getattr(_mod, _attr)
+            except ImportError:
+                continue
+
+        _CY_TO_PY_RENAMES = {
+            'CyHalfBinomialLoss': 'HalfBinomialLoss',
+            'CyHalfSquaredError': 'HalfSquaredError',
+            'CyAbsoluteError': 'AbsoluteError',
+            'CyHalfPoissonLoss': 'HalfPoissonLoss',
+            'CyHalfGammaLoss': 'HalfGammaLoss',
+            'CyHalfTweedieLoss': 'HalfTweedieLoss',
+            'CyHalfMultinomialLoss': 'HalfMultinomialLoss',
+            'CyHalfTweedieLossIdentity': 'HalfTweedieLossIdentity',
+            'CyPinballLoss': 'PinballLoss',
+            'CyHuberLoss': 'HuberLoss',
+        }
+        for cy_name, py_name in _CY_TO_PY_RENAMES.items():
+            if not hasattr(_sklearn_loss, cy_name):
+                if py_name in _loss_classes:
+                    setattr(_sklearn_loss, cy_name, _loss_classes[py_name])
+                elif hasattr(_sklearn_loss, py_name):
+                    setattr(_sklearn_loss, cy_name, getattr(_sklearn_loss, py_name))
+    except ImportError:
+        pass
 
 # =============================================================================
 # Load model artifacts
@@ -119,6 +121,8 @@ except ImportError:
 @st.cache_resource
 def load_artifacts():
     import joblib
+
+    _prepare_sklearn_compat()
 
     def _load_with_compat_unpickler(filepath):
         _sklearn_loss = importlib.import_module('sklearn._loss')
@@ -187,13 +191,7 @@ def load_artifacts():
         return None, None, f"Failed to load model: {e}\n\n{tb.format_exc()}"
 
 
-model, encoder, _load_err = load_artifacts()
-
 categorical_cols = ['PRODUCT', 'INCOME_LEVEL', 'EDUCATION', 'DEVICE_TYPE']
-if encoder is not None:
-    category_map = {col: list(cats) for col, cats in zip(categorical_cols, encoder.categories_)}
-else:
-    category_map = {col: [] for col in categorical_cols}
 
 # =============================================================================
 # Load precomputed data
@@ -382,6 +380,12 @@ with tab_churn:
         "Inputs match the top drivers: **subscription amount, session intensity, "
         "tech comfort, session length, product, and device type.**"
     )
+
+    model, encoder, _load_err = load_artifacts()
+    if encoder is not None:
+        category_map = {col: list(cats) for col, cats in zip(categorical_cols, encoder.categories_)}
+    else:
+        category_map = {col: [] for col in categorical_cols}
 
     if model is None or encoder is None:
         st.error(_load_err or "Model artifacts could not be loaded.")
