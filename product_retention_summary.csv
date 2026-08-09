@@ -1,0 +1,26 @@
+year_starts,product,gross_retention_rate
+2019-12-01,Daily Fitness,0.813
+2020-12-01,Daily Fitness,0.824
+2021-12-01,Daily Fitness,0.842
+2022-12-01,Daily Fitness,0.862
+2023-12-01,Daily Fitness,0.878
+2019-12-01,Healthy Meals,0.751
+2020-12-01,Healthy Meals,0.803
+2021-12-01,Healthy Meals,0.857
+2022-12-01,Healthy Meals,0.883
+2023-12-01,Healthy Meals,0.863
+2020-12-01,Mindful Living,0.84
+2021-12-01,Mindful Living,0.824
+2022-12-01,Mindful Living,0.789
+2023-12-01,Mindful Living,0.752
+2022-12-01,Premium Health,0.723
+2023-12-01,Premium Health,0.774
+2020-12-01,Wellness Tracker,0.785
+2021-12-01,Wellness Tracker,0.783
+2022-12-01,Wellness Tracker,0.784
+2023-12-01,Wellness Tracker,0.776
+2019-12-01,ALL (Aggregate),0.8269
+2020-12-01,ALL (Aggregate),0.867
+2021-12-01,ALL (Aggregate),0.8795
+2022-12-01,ALL (Aggregate),0.848
+2023-12-01,ALL (Aggregate),0.833

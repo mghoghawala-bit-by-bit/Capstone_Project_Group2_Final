@@ -1,0 +1,28 @@
+# created-by: streamlit-in-workspaces; skill-version=1.0.0
+definition_version: 2
+entities:
+  streamlit_app:
+    type: streamlit
+    identifier:
+      database: SUBSCRIPTION_DATA
+      schema: PROJECT_DATA
+      name: CAPSTONE_PROJECT_GROUP2
+    title: Capstone_Project_Group2
+    query_warehouse: COMPUTE_WH
+    compute_pool: SYSTEM_COMPUTE_POOL_CPU
+    run_mode: SpcsOnly
+    execute_as: OWNER
+    main_file: streamlit_app.py
+    external_access_integrations:
+      - PYPI_ACCESS_INTEGRATION
+    artifacts:
+      - streamlit_app.py
+      - pyproject.toml
+      - churn_model_final_project.pkl
+      - churn_encoder_final_project.pkl
+      - product_retention_summary.csv
+      - acquisition_segments.csv
+    sharing:
+      - role: PUBLIC
+        with_grant_option: true
+    idle_auto_shutdown_time_seconds: 86400
