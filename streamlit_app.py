@@ -32,6 +32,10 @@ def _bootstrap_streamlit_runtime():
             "0.0.0.0",
             "--server.port",
             "8507",
+            "--server.enableCORS",
+            "false",
+            "--server.enableXsrfProtection",
+            "false",
         ],
     )
 
