@@ -31,7 +31,7 @@ def _bootstrap_streamlit_runtime():
             "--server.address",
             "0.0.0.0",
             "--server.port",
-            "8501",
+            "8507",
         ],
     )
 

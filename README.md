@@ -22,3 +22,9 @@ OptimaLife grew from $5.60M to $50.35M ARR (2019–2022) but is now experiencing
 
 - **Top churn driver:** Current subscription amount (1.6× more important than next feature)
 - **Best acquisition target
+
+## Run And Deploy
+
+For the local Codespaces preview, the app is served on port 8507 and the workspace config already forwards that port publicly. Open the forwarded Streamlit preview after the container starts.
+
+For Snowflake, the repo only defines the app in `snowflake.yml`; it still has to be deployed from the Snowflake side before there is a usable public app URL. If you see a 404 in Snowflake, verify that the app has been deployed in the right account/schema and opened from the Snowflake app page rather than a guessed URL.
